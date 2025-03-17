@@ -5,6 +5,8 @@ import routerProduct from '../routes/product';
 import routerUser from '../routes/user';
 import Product from '../models/product';
 import sequelize from '../db/conection';
+import User from './user';
+import cors from 'cors';
 // Definimos una clase llamada server que manejará la configuración del servidor
 class server {
     // Declaramos una propiedad privada app que contendrá la instancia de express
@@ -49,6 +51,7 @@ class server {
     middlewares() {
         // Habilitamos el parsing de JSON en las peticiones
         this.app.use(express.json());
+        this.app.use(cors());
     }
     async dbConnection() {
     try {
@@ -58,6 +61,7 @@ class server {
         
         // Luego sincronizar los modelos
         await Product.sync();
+        await User.sync();
         console.log('Product table synchronized');
     } catch (error) {
         console.error('Unable to connect to the database:', error);

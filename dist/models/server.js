@@ -19,6 +19,8 @@ const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
 const product_2 = __importDefault(require("../models/product"));
 const conection_1 = __importDefault(require("../db/conection"));
+const user_2 = __importDefault(require("./user"));
+const cors_1 = __importDefault(require("cors"));
 // Definimos una clase llamada server que manejará la configuración del servidor
 class server {
     // Constructor de la clase - se ejecuta al crear una nueva instancia
@@ -53,6 +55,7 @@ class server {
     middlewares() {
         // Habilitamos el parsing de JSON en las peticiones
         this.app.use(express_1.default.json());
+        this.app.use((0, cors_1.default)());
     }
     dbConnection() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -62,6 +65,7 @@ class server {
                 console.log('Database connection established successfully');
                 // Luego sincronizar los modelos
                 yield product_2.default.sync();
+                yield user_2.default.sync();
                 console.log('Product table synchronized');
             }
             catch (error) {
