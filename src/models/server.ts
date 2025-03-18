@@ -17,7 +17,7 @@ class server {
     // Constructor de la clase - se ejecuta al crear una nueva instancia
     constructor() {
         // Asignamos el puerto desde las variables de entorno o usamos '3001' por defecto
-        this.port = process.env.PORT || '3001';
+        this.port = process.env.PORT || '3006';
         // Inicializamos la aplicación express
         this.app = express();
 

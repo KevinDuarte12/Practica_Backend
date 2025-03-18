@@ -12,38 +12,30 @@ import jwt from "jsonwebtoken";
 // Controlador para crear nuevos usuarios
 export const newUser = async (req: Request, res: Response) => {
     try {
-        // Extraemos username y password del cuerpo de la petición (JSON)
         const { username, password } = req.body;
 
-        // Buscamos si ya existe un usuario con ese username en la base de datos
         const user = await User.findOne({ where: { username: username } });
 
-        // Si encontramos un usuario existente, retornamos error
         if (user) {
             return res.status(400).json({
-                message: `El usuario ${username} ya existe`
+                msg: `El usuario ${username} ya existe` // Usa "msg" en lugar de "message"
             });
         }
 
-        // Generamos un hash de la contraseña con bcrypt
-        // El número 10 es el "salt rounds" - mayor número = más seguro pero más lento
         const passwordHash = await bcrypt.hash(password, 10);
 
-        // Creamos el nuevo usuario en la base de datos con el hash de la contraseña
         await User.create({
             username: username,
             password: passwordHash
         });
 
-        // Si todo sale bien, enviamos mensaje de éxito
         res.json({
-            message: `Usuario ${username} creado exitosamente`
+            msg: `Usuario ${username} creado exitosamente` // Usa "msg" para el mensaje de éxito
         });
 
     } catch (error) {
-        // Si algo falla, enviamos un error 400 con detalles
         res.status(400).json({
-            message: "Error al crear el usuario",
+            msg: "Error al crear el usuario", // Usa "msg" para el mensaje de error
             error
         });
     }
@@ -51,30 +43,26 @@ export const newUser = async (req: Request, res: Response) => {
 
 // Controlador para el login de usuarios
 export const login = async (req: Request, res: Response) => {
-    // Extraemos credenciales del cuerpo de la petición
     const { username, password } = req.body;
 
-    // Buscamos el usuario en la base de datos
     const user: any = await User.findOne({ where: { username: username } });
 
-    // Si no encontramos el usuario, retornamos error
     if (!user) {
         return res.status(400).json({
-            message: `Usuario ${username} no encontrado`
+            msg: `Usuario ${username} no encontrado` // Usa "msg" en lugar de "message"
         });
     }
 
-    // Verificamos si la contraseña coincide con el hash almacenado
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!passwordValid) {
         return res.status(400).json({
-            message: "Contraseña incorrecta"
+            msg: "Contraseña incorrecta" // Usa "msg" en lugar de "message"
         });
     }
+
     const token = jwt.sign({ 
         username: username
-    }, process.env.SECRET_KEY || 'hola123'
-    );
-    res.json(token);
-    // TODO: Implementar respuesta de login exitoso y generación de token
+    }, process.env.SECRET_KEY || 'hola123');
+
+    res.json({ token }); // Envía el token en un objeto JSON
 };
