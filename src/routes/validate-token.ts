@@ -1,45 +1,35 @@
-// Importamos los tipos de Express necesarios para definir el middleware
-// Request: tipo para el objeto de petición HTTP
-// Response: tipo para el objeto de respuesta HTTP
-// NextFunction: tipo para la función que pasa al siguiente middleware
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express'; // Importa los tipos de Express para manejar solicitudes, respuestas y el siguiente middleware
+import jwt from 'jsonwebtoken'; // Importa jwt para verificar tokens
 
-import jwt from 'jsonwebtoken';
-
-// Definimos el middleware que validará los tokens JWT
-// Este middleware se ejecutará antes de las rutas protegidas
+// Middleware para validar el token JWT
 const validarToken = (req: Request, res: Response, next: NextFunction) => {
-    // Obtenemos el header 'Authorization' que debe contener el token
-    // El formato esperado es: "Bearer eyJhbGciOiJIUzI1NiIs..."
-    const headerToken = req.headers['authorization']
+    // Obtiene el token del encabezado de la solicitud
+    const headerToken = req.headers['authorization'];
 
-    // Verificamos dos condiciones:
-    // 1. Que el header exista (no sea undefined)
-    // 2. Que comience con 'Bearer ' (nótese el espacio)
+    // Verifica si el token existe y comienza con 'Bearer '
     if (headerToken != undefined && headerToken.startsWith('Bearer ')) {
-        // Si el token es válido, permitimos que la petición continúe
-        // hacia el siguiente middleware o controlador
         try {
+            // Extrae el token sin el prefijo 'Bearer '
             const bearerToken = headerToken.slice(7);
-            jwt.verify(headerToken, process.env.SECRET_KEY || "hola123")
-            next()
+
+            // Verifica si el token es válido usando la clave secreta
+            jwt.verify(bearerToken, process.env.SECRET_KEY || "hola123");
+
+            // Si el token es válido, pasa al siguiente middleware o controlador
+            next();
         } catch (error) {
+            // Si el token no es válido, devuelve un error 401
             res.status(401).json({
                 msg: 'token no valido'
-            })
+            });
         }
-
-
     } else {
-        // Si no hay token o el formato es incorrecto:
-        // - Respondemos con estado 401 (No autorizado)
-        // - Enviamos un mensaje explicativo
+        // Si no hay token o no tiene el formato correcto, devuelve un error 401
         res.status(401).json({
             msg: "Acceso denegado"
-        })
+        });
     }
-}
+};
 
-// Exportamos el middleware para poder importarlo en otros archivos
-// Típicamente se usa en las rutas que requieren autenticación
+// Exporta el middleware para su uso en otras partes de la aplicación
 export default validarToken;

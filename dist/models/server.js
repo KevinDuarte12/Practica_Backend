@@ -55,7 +55,11 @@ class server {
     middlewares() {
         // Habilitamos el parsing de JSON en las peticiones
         this.app.use(express_1.default.json());
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, cors_1.default)({
+            origin: 'http://localhost:4200', // Tu URL de Angular (ajústala si es diferente)
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            allowedHeaders: ['Content-Type', 'Authorization']
+        }));
     }
     dbConnection() {
         return __awaiter(this, void 0, void 0, function* () {

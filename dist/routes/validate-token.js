@@ -3,39 +3,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// Definimos el middleware que validará los tokens JWT
-// Este middleware se ejecutará antes de las rutas protegidas
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // Importa jwt para verificar tokens
+// Middleware para validar el token JWT
 const validarToken = (req, res, next) => {
-    // Obtenemos el header 'Authorization' que debe contener el token
-    // El formato esperado es: "Bearer eyJhbGciOiJIUzI1NiIs..."
+    // Obtiene el token del encabezado de la solicitud
     const headerToken = req.headers['authorization'];
-    // Verificamos dos condiciones:
-    // 1. Que el header exista (no sea undefined)
-    // 2. Que comience con 'Bearer ' (nótese el espacio)
+    // Verifica si el token existe y comienza con 'Bearer '
     if (headerToken != undefined && headerToken.startsWith('Bearer ')) {
-        // Si el token es válido, permitimos que la petición continúe
-        // hacia el siguiente middleware o controlador
         try {
+            // Extrae el token sin el prefijo 'Bearer '
             const bearerToken = headerToken.slice(7);
-            jsonwebtoken_1.default.verify(headerToken, process.env.SECRET_KEY || "hola123");
+            // Verifica si el token es válido usando la clave secreta
+            jsonwebtoken_1.default.verify(bearerToken, process.env.SECRET_KEY || "hola123");
+            // Si el token es válido, pasa al siguiente middleware o controlador
             next();
         }
         catch (error) {
+            // Si el token no es válido, devuelve un error 401
             res.status(401).json({
                 msg: 'token no valido'
             });
         }
     }
     else {
-        // Si no hay token o el formato es incorrecto:
-        // - Respondemos con estado 401 (No autorizado)
-        // - Enviamos un mensaje explicativo
+        // Si no hay token o no tiene el formato correcto, devuelve un error 401
         res.status(401).json({
             msg: "Acceso denegado"
         });
     }
 };
-// Exportamos el middleware para poder importarlo en otros archivos
-// Típicamente se usa en las rutas que requieren autenticación
+// Exporta el middleware para su uso en otras partes de la aplicación
 exports.default = validarToken;

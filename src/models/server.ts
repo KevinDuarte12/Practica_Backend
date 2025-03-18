@@ -51,7 +51,12 @@ class server {
     middlewares() {
         // Habilitamos el parsing de JSON en las peticiones
         this.app.use(express.json());
-        this.app.use(cors());
+        this.app.use(cors({
+        origin: 'http://localhost:4200', // Tu URL de Angular (ajústala si es diferente)
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization']
+        }
+        ));
     }
     async dbConnection() {
     try {
