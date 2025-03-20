@@ -1,16 +1,26 @@
-// Importamos Router desde express para crear rutas
-import { Router } from 'express'
-
+import { Router } from 'express';
 import validarToken from './validate-token';
+import { 
+    getProduct, 
+    getProductById,
+    createProduct, 
+    updateProduct, 
+    deleteProduct 
+} from '../controllers/product.controller';
 
-// Importamos el controlador getProduct para manejar la ruta
-import { getProduct } from '../controllers/product.controller';
-
-// Creamos una nueva instancia del router
 const router = Router();
 
-// Definimos una ruta GET en la raíz ('/') que usará el controlador getProduct
-router.get('/', validarToken, getProduct);
+// Rutas GET
+router.get('/', validarToken, getProduct);           // Obtener todos los productos
+router.get('/:id', validarToken, getProductById);    // Obtener un producto por ID
 
-// Exportamos el router para usarlo en otros archivos
+// Ruta POST
+router.post('/', validarToken, createProduct);       // Crear nuevo producto
+
+// Ruta PUT
+router.put('/:id', validarToken, updateProduct);     // Actualizar producto
+
+// Ruta DELETE
+router.delete('/:id', validarToken, deleteProduct);  // Eliminar producto
+
 export default router;
