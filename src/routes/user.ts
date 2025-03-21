@@ -1,19 +1,23 @@
-// Importamos Router y RequestHandler desde express
-import { Router, RequestHandler } from 'express';
+import { Router } from 'express';
+import { 
+    newUser, 
+    login, 
+    getUsers, 
+    updateUser, 
+    deleteUser
+} from '../controllers/user.controller';
+import validateToken from './validate-token';
+import { RequestHandler } from 'express';
 
-// Importamos los controladores newUser y login
-import { newUser, login } from '../controllers/user.controller';
-
-// Creamos una nueva instancia del router
 const router = Router();
 
-// Definimos una ruta POST en la raíz ('/') para crear nuevos usuarios
-// Usando type assertion para indicar que newUser es un RequestHandler
-router.post('/', newUser as RequestHandler);
-
-// Definimos una ruta POST '/login' para manejar la autenticación
-// Usando type assertion para indicar que login es un RequestHandler
+// Rutas públicas
+router.post('/', newUser);
 router.post('/login', login as RequestHandler);
 
-// Exportamos el router para usarlo en otros archivos
+// Rutas protegidas (necesitan token)
+router.get('/',  getUsers);                    // Cambio: de /users a /
+router.put('/:id', validateToken, updateUser as RequestHandler);
+router.delete('/:id', validateToken, deleteUser as RequestHandler);
+
 export default router;

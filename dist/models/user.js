@@ -8,7 +8,7 @@ const conection_1 = __importDefault(require("../db/conection"));
 // Importamos DataTypes de sequelize para definir los tipos de datos de las columnas
 const sequelize_1 = require("sequelize");
 // Definimos el modelo Product con sus campos y tipos de datos
-const User = conection_1.default.define('user', {
+const User = conection_1.default.define('users', {
     id: {
         type: sequelize_1.DataTypes.INTEGER, // Tipo de dato INTEGER
         autoIncrement: true, // Autoincremental

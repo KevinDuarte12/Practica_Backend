@@ -17,7 +17,7 @@ const express_1 = __importDefault(require("express"));
 // Importamos los routers para productos y usuarios
 const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
-const product_2 = __importDefault(require("../models/product"));
+const product_2 = __importDefault(require("./product"));
 const conection_1 = __importDefault(require("../db/conection"));
 const user_2 = __importDefault(require("./user"));
 const cors_1 = __importDefault(require("cors"));

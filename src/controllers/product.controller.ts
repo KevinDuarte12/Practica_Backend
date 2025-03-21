@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'; // Importa los tipos Request y Response de Express
-import Product from '../models/product'; // Importa el modelo de Producto
+import Product from '../db/models/product'; // Importa el modelo de Producto
 
 // GET - Obtener todos los productos
 export const getProduct = async (req: Request, res: Response): Promise<void> => {

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductById = exports.getProduct = void 0;
-const product_1 = __importDefault(require("../models/product")); // Importa el modelo de Producto
+const product_1 = __importDefault(require("../db/models/product")); // Importa el modelo de Producto
 // GET - Obtener todos los productos
 const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

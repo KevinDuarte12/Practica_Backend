@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon dist/index.js",
-    "typescript": "tsc --watch"
+    "typescript": "tsc --watch",
+    "migrate": "sequelize-cli db:migrate"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.9",
     "nodemon": "^3.1.9",
+    "sequelize-cli": "^6.6.2",
     "typescript": "^5.8.2"
   }
 }
